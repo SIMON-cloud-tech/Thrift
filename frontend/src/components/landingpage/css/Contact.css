@@ -1,294 +1,299 @@
-/* ════════════════════════════════════════
-   CONTACT SECTION — ENERGEN
-   Dark premium theme with brand colors
-   ════════════════════════════════════════ */
+/* ==========================================================
+   Contact.css — consumes tokens from index.css
+   Mobile-first. 1 → 2 columns at 900px.
+   ========================================================== */
 
+/* ---------- Section ---------- */
 .contact-section {
-  --c-bg: #0f1a3a;
-  --c-surface: #16162b;
-  --c-surface-2: #1f1f3a;
-  --c-border: #2a2a4a;
-
-  --c-accent: #f39c12;
-  --c-accent-soft: rgba(243, 156, 18, 0.12);
-  --c-accent-warm: #e67e22;
-
-  --c-wa: #25d366;
-
-  --c-text-head: #f5f0eb;
-  --c-text-body: #b0a8a0;
-  --c-text-dim: #6a635c;
-
-  --c-success-bg: rgba(37, 211, 102, 0.1);
-  --c-success-border: rgba(37, 211, 102, 0.2);
-
-  --radius: 14px;
-  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.35);
-  --transition: 180ms ease;
-
-  width: 100%;
-  background:
-    radial-gradient(circle at top right, rgba(243, 156, 18, 0.08), transparent 28%),
-    radial-gradient(circle at bottom left, rgba(26, 42, 108, 0.12), transparent 30%),
-    #0f1a3a;
-
-  padding: 5rem 1.4rem 0;
-  position: relative;
-  overflow: hidden;
-  color: white;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+  color: var(--color-ink);
 }
 
-/* ── Subtle grain texture ── */
-.contact-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.04;
-  pointer-events: none;
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      #fff 0px,
-      #fff 1px,
-      transparent 1px,
-      transparent 4px
-    );
-}
-
-/* ── Ensure content sits above the pseudo-element ── */
-.contact-section > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* ════════════════════════════════════════
-   HEADER
-   ════════════════════════════════════════ */
-
+/* ---------- Header ---------- */
 .contact-header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  max-width: 640px;
+  margin: 0 auto 3.5rem;
 }
 
 .contact-title {
-  font-size: 2.2rem;
-  color: #f39c12;
-  margin-bottom: 0.5rem;
+  font-size: 2.25rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+  color: var(--color-ink);
 }
 
 .contact-subtitle {
-  font-size: 1.05rem;
-  color: rgba(255, 255, 255, 0.8);
-  max-width: 650px;
-  margin: 0 auto;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-ink-soft);
+  margin: 0;
 }
 
-/* ════════════════════════════════════════
-   BODY (2‑column)
-   ════════════════════════════════════════ */
-
+/* ---------- Two-column body ---------- */
 .contact-body {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 2.5rem;
-  margin-bottom: 2rem;
+  align-items: start;
 }
 
-/* ── Left ── */
-.contact-left {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  padding: 1.5rem;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+@media (min-width: 900px) {
+  .contact-body {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
 }
 
-.contact-left h3 {
-  font-size: 1.3rem;
-  color: #f39c12;
-  margin-bottom: 1rem;
+/* ---------- Column headings ---------- */
+.contact-left h3,
+.contact-right h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin: 0 0 1.5rem;
+  letter-spacing: -0.01em;
 }
 
+/* ==========================================================
+   CONTACT DETAILS
+   ========================================================== */
 .detail-row {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-line);
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.85);
-  transition: color 0.3s;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: inherit;
 }
 
-.detail-row:last-child {
+.detail-row:first-of-type {
+  padding-top: 0;
+}
+
+.detail-row:last-of-type {
   border-bottom: none;
 }
 
-.detail-row:hover {
-  color: #f39c12;
-}
-
 .detail-row__icon {
-  font-size: 1.2rem;
-  color: #f39c12;
-  min-width: 2rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 1rem;
 }
 
 .detail-row strong {
   display: block;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  margin-bottom: 0.25rem;
 }
 
 .detail-row p {
-  margin: 0;
   font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-ink);
+  margin: 0;
+  word-break: break-word;
 }
 
-.hours-card,
-.delivery-areas {
-  margin-top: 1.25rem;
+/* Links inside detail rows */
+.detail-row p a {
+  color: var(--color-ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--transition), border-color var(--transition);
 }
 
-.hours-card h4,
-.delivery-areas h4 {
-  font-size: 1rem;
-  color: #f39c12;
-  margin-bottom: 0.5rem;
+.detail-row p a:hover,
+.detail-row p a:focus-visible {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+  outline: none;
+}
+
+/* ==========================================================
+   WORKING HOURS CARD
+   ========================================================== */
+.hours-card {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+}
+
+.hours-card h4 {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-ink);
+  margin: 0 0 1rem;
 }
 
 .hours-card p {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0.2rem 0;
+  color: var(--color-ink-soft);
+  margin: 0 0 0.5rem;
+  line-height: 1.6;
+}
+
+.hours-card p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==========================================================
+   DELIVERY AREAS CARD
+   ========================================================== */
+.delivery-areas {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: var(--color-accent-soft);
+  border-radius: var(--radius-lg);
+}
+
+.delivery-areas h4 {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-accent-strong);
+  margin: 0 0 0.5rem;
 }
 
 .delivery-areas p {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.5;
+  color: var(--color-accent-deep);
+  line-height: 1.6;
+  margin: 0;
 }
 
-/* ── Right (Form) ── */
-.contact-right {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  padding: 1.5rem;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.contact-right h3 {
-  font-size: 1.3rem;
-  color: #f39c12;
-  margin-bottom: 0.5rem;
-}
-
+/* ==========================================================
+   FORM
+   ========================================================== */
 .success {
-  background: rgba(37, 211, 102, 0.15);
-  color: #2ecc71;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  margin-bottom: 0.75rem;
-  border: 1px solid rgba(37, 211, 102, 0.2);
+  padding: 0.875rem 1rem;
+  background: var(--color-success-soft);
+  color: var(--color-success-strong);
+  border-left: 4px solid var(--color-success);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  margin: 0 0 1.25rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .contact-form input,
 .contact-form textarea {
   width: 100%;
-  padding: 0.65rem 0.8rem;
-  margin-bottom: 0.75rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-  font-size: 0.9rem;
-  color: white;
   box-sizing: border-box;
-  transition: border-color 0.3s;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
 }
 
 .contact-form input::placeholder,
 .contact-form textarea::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-muted);
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-  outline: none;
-  border-color: #f39c12;
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-ring);
 }
 
 .contact-form textarea {
-  min-height: 100px;
   resize: vertical;
+  min-height: 140px;
+  line-height: 1.6;
 }
 
 .contact-form button {
-  width: 100%;
-  padding: 0.7rem;
-  background: #f39c12;
-  color: #0f1a3a;
+  padding: 1rem 1.5rem;
   border: none;
-  border-radius: 5px;
+  border-radius: var(--radius);
+  background: var(--color-ink);
+  color: #fff;
+  font-family: inherit;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: background var(--transition), transform 0.15s ease;
 }
 
 .contact-form button:hover {
-  background: #e67e22;
-  transform: scale(1.01);
+  background: var(--color-accent);
 }
 
-/* ── Map ── */
-.contact-map {
-  margin-top: 2rem;
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+.contact-form button:active {
+  transform: scale(0.99);
 }
 
-.contact-map iframe {
-  width: 100%;
-  height: 300px;
-  border: none;
-  display: block;
+.contact-form button:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
-/* ════════════════════════════════════════
+/* ==========================================================
    RESPONSIVE
-   ════════════════════════════════════════ */
-
-@media (max-width: 768px) {
-  .contact-body {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .contact-title {
-    font-size: 1.8rem;
-  }
-
+   ========================================================== */
+@media (max-width: 900px) {
   .contact-section {
-    padding: 2rem 1rem;
+    padding: 3.5rem 1.5rem;
+  }
+  .contact-header {
+    margin-bottom: 2.5rem;
+  }
+  .contact-title {
+    font-size: 1.875rem;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 500px) {
+  .contact-section {
+    padding: 2.5rem 1rem;
+  }
   .contact-title {
-    font-size: 1.5rem;
+    font-size: 1.625rem;
   }
-  .contact-subtitle {
-    font-size: 0.95rem;
+  .hours-card,
+  .delivery-areas {
+    padding: 1.25rem;
   }
-  .contact-left,
-  .contact-right {
-    padding: 1rem;
-  }
-  .contact-map iframe {
-    height: 200px;
+}
+
+/* ==========================================================
+   REDUCED MOTION
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .detail-row p a,
+  .contact-form input,
+  .contact-form textarea,
+  .contact-form button {
+    transition: none;
   }
 }

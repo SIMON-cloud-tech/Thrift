@@ -9,10 +9,12 @@ import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
 import Contact from './pages/Contact.jsx';
 import Products from './components/landingpage/jsx/Products.jsx';
-import Projects from './components/landingpage/jsx/Projects.jsx';
-import ProjectDetail from './components/landingpage/jsx/ProjectDetail.jsx';
 import BlogDetail from './components/landingpage/jsx/BlogDetail.jsx';
 import BlogSection from './components/landingpage/jsx/BlogSection.jsx';
+import CategoryPage from './components/landingpage/jsx/CategoryPage.jsx';
+import ProductDetail from './components/landingpage/jsx/ProductDetail.jsx';
+import Checkout from './components/landingpage/jsx/Checkout.jsx';
+import Testimonials from './components/landingpage/jsx/Testimonials.jsx';
 
 // Admin / Auth
 import Auth from './components/dashboard/jsx/Auth.jsx';
@@ -56,9 +58,12 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/products" element={<Products />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:id" element={<ProjectDetail />} />
+       <Route path="/collections/:category" element={<CategoryPage />} />
+       <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/blogs" element={<BlogSection />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/blogs/:id" element={<BlogDetail />} />
       </Route>
 

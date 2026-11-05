@@ -1,14 +1,15 @@
 import SEO from '../components/SEO/Seo.jsx';
 import Reach from '../components/landingpage/jsx/Reach.jsx';
-export default function Contact(){
-  return(
+
+export default function Contact() {
+  return (
     <>
       <SEO
-        title="Contact Energen"
-        description="Contact Energen for solar consultations, site assessments, and support for renewable energy installations in Kenya."
-        keywords="solar consultation Kenya, contact Energen, solar quote, renewable energy support"
+        title="Contact Drip Mtaani"
+        description="Reach us on WhatsApp or call 0789 679 161. We help with sizes, restocks, and same-day delivery across Nairobi. Countrywide delivery available on request."
+        keywords="contact Drip Mtaani, shoes Nairobi WhatsApp, buy shoes Kenya, shoe delivery Nairobi, sneaker restock Kenya"
       />
       <Reach />
     </>
-  )
+  );
 }

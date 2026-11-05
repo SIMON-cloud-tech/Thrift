@@ -1,4 +1,5 @@
 // ── Add to cart ──
+export const DELIVERY_FEE = 300;
 export const addToCart = (cart, product) => {
   const exists = cart.find(item => item.id === product.id);
   if (exists) {

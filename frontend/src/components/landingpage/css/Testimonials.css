@@ -1,7 +1,9 @@
-/* ════════════════════════════════════════
-   TESTIMONIALS SECTION
-   ════════════════════════════════════════ */
+/* ==========================================================
+   Testimonials.css — consumes tokens from index.css
+   CTA buttons scoped to .testimonials-cta to prevent collisions
+   ========================================================== */
 
+/* ---------- Header ---------- */
 .testimonial-header {
   text-align: center;
   max-width: 700px;
@@ -11,70 +13,72 @@
 
 .testimonial-header h2 {
   font-size: 2.2rem;
-  color: #1a2a6c;
+  color: var(--color-ink);
   margin-bottom: 0.5rem;
   letter-spacing: -0.5px;
 }
 
 .testimonial-header p {
   font-size: 1.1rem;
-  color: #555;
+  color: var(--color-ink-soft);
   line-height: 1.6;
   font-weight: 400;
 }
 
-/* ── Main Section ── */
+/* ---------- Section shell ---------- */
 .testimonials-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 400px;
   max-width: 1200px;
   margin: 0 auto 3rem;
-  background: #f5f5f5;  /* Fallback color */
-  border-radius: 12px;
+  background: var(--color-bg-soft);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow);
 }
 
-/* ── LEFT: CTA with Full Image Cover ── */
+/* ---------- LEFT: CTA with full image cover ---------- */
 .testimonials-cta {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background-image: url('/solar1.webp');
-  background-size: cover;          /* Full coverage */
-  background-position: center;     /* Center the image */
-  background-repeat: no-repeat;    /* No tiling */
-  min-height: 300px;               /* Ensures image has space to show */
+  /* ⚠️ ENERGEN LEFTOVER — replace with a Drip Mtaani shoe image.
+     This path is the old solar panel photo. Swap once the client
+     provides the right hero image for the CTA. */
+  background-image: url('/shoe.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 300px;
 }
 
-/* ── Dark overlay for text readability ── */
+/* Dark overlay for readability */
 .testimonials-cta::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(15, 26, 58, 0.6);  /* Dark overlay */
+  background: rgba(15, 26, 58, 0.6);
   z-index: 0;
 }
 
 .cta-overlay {
   position: relative;
   z-index: 1;
-  color: white;
-  padding: 2.5rem;                 /* Increased padding */
-  border-radius: 12px;
+  color: #fff;
+  padding: 2.5rem;
+  border-radius: var(--radius-md);
   text-align: center;
   max-width: 450px;
 }
 
-/* ── Spacing for h2 ── */
 .cta-overlay h2 {
   font-size: 2.2rem;
-  margin-bottom: 0.75rem;          /* Added spacing */
+  margin-bottom: 0.75rem;
   font-weight: 700;
-  color: #f39c12;                  /* Gold for visibility */
+  color: var(--color-accent-on-dark);
 }
 
 .cta-overlay p {
@@ -92,48 +96,50 @@
   flex-wrap: wrap;
 }
 
-.btn-cta {
+/* ---------- CTA buttons — scoped ---------- */
+.testimonials-cta .btn-cta {
   padding: 0.6rem 1.8rem;
   border: none;
-  border-radius: 30px;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, background 0.2s;
+  transition: transform var(--transition), background var(--transition);
 }
 
-.btn-cta:hover {
+.testimonials-cta .btn-cta:hover {
   transform: scale(1.05);
 }
 
-.shop-btn {
-  background: #f39c12;
-  color: #1a2a6c;
+.testimonials-cta .shop-btn {
+  background: var(--color-accent-on-dark);
+  color: var(--color-ink);
 }
 
-.shop-btn:hover {
-  background: #e67e22;
+.testimonials-cta .shop-btn:hover {
+  background: var(--color-accent-on-dark-pressed);
 }
 
-.consult-btn {
+.testimonials-cta .consult-btn {
   background: transparent;
-  color: white;
-  border: 2px solid white;
+  color: #fff;
+  border: 2px solid #fff;
 }
 
-.consult-btn:hover {
-  background: white;
-  color: #1a2a6c;
+.testimonials-cta .consult-btn:hover {
+  background: #fff;
+  color: var(--color-ink);
 }
 
-/* ── RIGHT: Testimonial Carousel ── */
+/* ---------- RIGHT: carousel ---------- */
 .testimonials-carousel {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  background: white;
+  background: var(--color-bg);
   position: relative;
 }
 
@@ -141,24 +147,17 @@
   max-width: 400px;
   text-align: center;
   padding: 1rem 0;
-
   opacity: 0;
-  animation: fadeIn 0.8s ease forwards;
+  animation: testimonial-fade-in 0.8s ease forwards;
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes testimonial-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .quote-icon {
-  color: #f39c12;
+  color: var(--color-accent);
   font-size: 2rem;
   margin-bottom: 0.75rem;
 }
@@ -166,7 +165,7 @@
 .testimonial-text {
   font-size: 1.1rem;
   line-height: 1.7;
-  color: #2c3e50;
+  color: var(--color-ink-soft);
   margin-bottom: 1rem;
   font-style: italic;
 }
@@ -179,69 +178,65 @@
 
 .author-name {
   font-weight: 600;
-  color: #1a2a6c;
+  color: var(--color-ink);
   font-size: 1.05rem;
 }
 
 .author-location {
   font-size: 0.85rem;
-  color: #7f8c8d;
+  color: var(--color-muted);
 }
 
-/* ── Dot Indicators ── */
+/* ---------- Dot indicators — scoped ---------- */
 .dot-indicators {
   display: flex;
   gap: 0.5rem;
   margin-top: 1.5rem;
 }
 
-.dot {
+.dot-indicators .dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #e1e8ed;
+  background: var(--color-line-strong);
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: background var(--transition), transform var(--transition);
 }
 
-.dot.active {
-  background: #f39c12;
+.dot-indicators .dot.active {
+  background: var(--color-accent);
   transform: scale(1.2);
 }
 
-.dot:hover {
-  background: #b0b8c0;
+.dot-indicators .dot:hover {
+  background: var(--color-faint);
 }
 
+/* ---------- Loading ---------- */
 .testimonials-loading {
   text-align: center;
   padding: 2rem;
-  color: #7f8c8d;
+  color: var(--color-muted);
 }
 
-/* ── Responsive ── */
+/* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .testimonials-section {
     grid-template-columns: 1fr;
   }
-
   .testimonials-cta {
     min-height: 250px;
   }
-
   .cta-overlay {
     max-width: 100%;
     padding: 2rem;
   }
-
   .cta-overlay h2 {
     font-size: 1.8rem;
   }
-
   .testimonials-carousel {
     padding: 1.5rem;
   }
-
   .testimonial-text {
     font-size: 1rem;
   }
@@ -251,21 +246,36 @@
   .testimonials-cta {
     min-height: 200px;
   }
-
   .cta-overlay {
     padding: 1.5rem;
   }
-
   .cta-overlay h2 {
     font-size: 1.4rem;
   }
-
-  .btn-cta {
+  .testimonials-cta .btn-cta {
     width: 100%;
     text-align: center;
   }
-
   .testimonial-text {
     font-size: 0.95rem;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .testimonials-cta .btn-cta,
+  .dot-indicators .dot {
+    transition: none;
+  }
+  .testimonials-cta .btn-cta:hover {
+    transform: none;
+  }
+  .dot-indicators .dot.active {
+    transform: none;
   }
 }

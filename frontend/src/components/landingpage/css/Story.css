@@ -1,125 +1,111 @@
-/* ── About Page ── */
+/* ==========================================================
+   Story.css — About page
+   Consumes tokens from index.css
+   ========================================================== */
+
+/* ---------- Page ---------- */
 .about-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem 3rem;
 }
 
-/* ── Hero / Intro ── */
+/* ---------- Hero / intro ---------- */
 .about-hero {
   position: relative;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   margin-bottom: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 4rem 2rem; /* Added padding so the text has breathing room */
+  background: var(--color-bg-soft); /* Added a subtle background so it's not just floating text */
   text-align: center;
-  /* Smoother, slightly snappier fade-in */
   opacity: 0;
-  animation: fadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: about-fade-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   will-change: opacity, transform;
 }
 
-.about-hero-overlay {
-  padding: 2rem;
-  border-radius: 12px;
-  color: #333;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
 .about-hero h1 {
-  font-size: 2rem;
-  color: #333;
+  font-size: 2.5rem; /* Made it slightly bigger */
+  color: var(--color-ink);
   margin-bottom: 0.5rem;
-  transition: color 0.25s ease;
+  font-weight: 800;
 }
 
 .about-hero p {
   font-size: 1.2rem;
-  opacity: 0.9;
-  transition: opacity 0.25s ease;
+  color: var(--color-ink-soft);
 }
 
-/* ── Content: Image + Text ── */
+/* ---------- Content: image + text ---------- */
 .about-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2.5rem;
+  gap: 3rem;
   align-items: center;
   margin-bottom: 4rem;
   opacity: 0;
-  animation: fadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+  animation: about-fade-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
   will-change: opacity, transform;
 }
 
+/* 👇 THE FIX: Removed fixed height. Used aspect-ratio instead. */
 .about-image {
-  height: 350px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  aspect-ratio: 4 / 5; /* Portrait shape — perfect for shoes */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f0f0f0; /* retained placeholder */
-  transition: box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  background: var(--color-bg-muted);
+  transition: box-shadow var(--transition-slow), transform var(--transition-slow);
 }
 
 .about-image:hover {
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
 }
 
 .about-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Smoother image appear + subtle scale for polish */
-  opacity: 0;
-  transform: scale(1.02);
-  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, transform;
+  display: block;
+  transition: transform var(--transition-slow);
 }
 
-/* Once the image has loaded the browser will paint it; this keeps the transition smooth */
-.about-image img[src] {
-  opacity: 1;
-  transform: scale(1);
+.about-image:hover img {
+  transform: scale(1.03); /* Subtle zoom on hover */
 }
 
+/* ---------- Text ---------- */
 .about-text h2 {
   font-size: 2rem;
-  color: #1a2a6c;
-  margin-bottom: 1rem;
-  transition: color 0.25s ease;
+  color: var(--color-ink);
+  margin-bottom: 1.25rem;
+  font-weight: 800;
 }
 
 .about-text p {
   font-size: 1.05rem;
   line-height: 1.7;
-  color: #333;
+  color: var(--color-ink-soft);
   margin-bottom: 1rem;
-  transition: color 0.25s ease;
 }
 
 .about-text .tagline {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #f39c12;
+  color: var(--color-accent);
   letter-spacing: 1px;
-  transition: color 0.25s ease, transform 0.25s ease;
+  margin-top: 1.5rem;
+  display: inline-block;
+  transition: color var(--transition), transform var(--transition);
 }
 
 .about-text .tagline:hover {
-  color: #e67e22; /* subtle warmer accent on hover – still in the same family */
-  transform: translateY(-1px);
+  color: var(--color-accent-hover);
+  transform: translateX(4px); /* Moves slightly right on hover */
 }
 
-/* ── Mission, Vision, Values ── */
+/* ---------- Mission / vision / values ---------- */
 .about-mvv {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -128,23 +114,23 @@
 }
 
 .mvv-card {
-  background: white; /* retained */
-  padding: 2rem 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  background: var(--color-bg);
+  padding: 2.5rem 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
   text-align: center;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  
-  /* Start hidden – same as before */
+  border: 1px solid var(--color-line);
+  transition:
+    transform var(--transition-slow) cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow var(--transition-slow) cubic-bezier(0.22, 1, 0.36, 1);
   opacity: 0;
   transform: translateY(30px);
   will-change: opacity, transform;
 }
 
-/* Trigger animation when visible – smoother curve + slightly faster */
+/* Triggered by IntersectionObserver adding .mvv-visible */
 .mvv-card.mvv-visible {
-  animation: slideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: about-slide-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .mvv-card:nth-child(1).mvv-visible { animation-delay: 0.08s; }
@@ -153,21 +139,21 @@
 
 .mvv-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.13);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-line-strong);
 }
 
 .mvv-card h3 {
-  font-size: 1.4rem;
-  color: #1a2a6c;
+  font-size: 1.25rem;
+  color: var(--color-ink);
   margin-bottom: 0.75rem;
-  transition: color 0.25s ease;
+  font-weight: 700;
 }
 
 .mvv-card p {
-  color: #555;
+  color: var(--color-ink-soft);
   line-height: 1.6;
   font-size: 0.95rem;
-  transition: color 0.25s ease;
 }
 
 .mvv-card ul {
@@ -177,75 +163,83 @@
 }
 
 .mvv-card ul li {
-  padding: 0.3rem 0;
-  font-weight: 500;
-  color: #1a2a6c;
-  transition: color 0.25s ease, transform 0.25s ease;
+  padding: 0.4rem 0;
+  font-weight: 600;
+  color: var(--color-ink);
+  transition: color var(--transition), transform var(--transition);
 }
 
 .mvv-card ul li:hover {
-  color: #f39c12; /* accent on hover – still using your palette */
-  transform: translateX(2px);
+  color: var(--color-accent);
+  transform: translateX(4px);
 }
 
-/* ── Animations ── */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ---------- Animations ---------- */
+@keyframes about-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(28px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes about-slide-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Responsive ── */
+/* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .about-content {
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
-
+  
   .about-image {
-    height: 250px;
-    order: -1;
+    aspect-ratio: 4 / 3; /* Change to landscape on mobile so it doesn't take up the whole screen */
   }
-
+  
   .about-mvv {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-
+  
   .about-hero h1 {
     font-size: 2rem;
   }
-  .about-hero p {
-    font-size: 1rem;
-  }
+  
   .about-text h2 {
-    font-size: 1.6rem;
+    font-size: 1.75rem;
   }
 }
 
 @media (max-width: 480px) {
-  .about-image {
-    height: 200px;
+  .about-hero {
+    padding: 3rem 1rem;
   }
+  
   .about-text p {
     font-size: 0.95rem;
   }
+  
   .mvv-card {
-    padding: 1.5rem 1rem;
+    padding: 2rem 1rem;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .about-hero,
+  .about-content,
+  .mvv-card,
+  .mvv-card.mvv-visible {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .about-image,
+  .about-image img,
+  .about-text .tagline,
+  .mvv-card,
+  .mvv-card ul li {
+    transition: none;
+    transform: none;
   }
 }

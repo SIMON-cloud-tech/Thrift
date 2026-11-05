@@ -1,117 +1,92 @@
-import { useState, useEffect } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import { addToCart } from '../../../utils/CartUtil';
-import SEO from '../../SEO/Seo';
-import '../css/Products.css';
+import { useState, useEffect, useMemo } from "react";
+import { useOutletContext, useNavigate } from "react-router-dom";
+import { addToCart } from "../../../utils/CartUtil";
+import SEO from "../../SEO/Seo";
+import "../css/Products.css";
 
-const Products = () => {
-  const { cart, setCart } = useOutletContext(); // from PublicLayout
+const PAGE = 3;
 
-  const [allProducts, setAllProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(3);
-  const [searchTerm, setSearchTerm] = useState('');
+export default function Products({ variant = "full" }) {
+  const isLight = variant === "light";
+  const { setCart } = useOutletContext();
+  const navigate = useNavigate();
+
+  const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState("");
+  const [limit, setLimit] = useState(PAGE);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch('/api/inventory');
-        if (!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-        setAllProducts(data);
-        setFilteredProducts(data);
-      } catch (err) {
-        console.error('Fetch error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
+    let dead = false;
+    fetch("/api/products")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d) => !dead && setProducts(Array.isArray(d) ? d : d?.data || d?.products || []))
+      .catch(() => !dead && setError(true))
+      .finally(() => !dead && setLoading(false));
+    return () => { dead = true; };
   }, []);
 
-  useEffect(() => {
-    const term = searchTerm.toLowerCase().trim();
-    if (!term) {
-      setFilteredProducts(allProducts);
-    } else {
-      const filtered = allProducts.filter(p =>
-        p.name.toLowerCase().includes(term)
-      );
-      setFilteredProducts(filtered);
-    }
-    setVisibleCount(3);
-  }, [searchTerm, allProducts]);
+  const shown = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return !q
+      ? products
+      : products.filter((p) => p.name?.toLowerCase().includes(q) || String(p.price ?? "").includes(q));
+  }, [products, search]);
 
-  const handleAddToCart = (product) => {
-    setCart(prev => addToCart(prev, product));
-  };
-
-  const loadMore = () => setVisibleCount(prev => prev + 3);
-
-  const visibleProducts = filteredProducts.slice(0, visibleCount);
-  const hasMore = visibleCount < filteredProducts.length;
-
-  if (loading) {
-  return (
-    <div className="products-loading">
-      <div className="spinner"></div>
-      <p>Loading products...</p>
-    </div>
+  if (loading) return (
+    <div className="products-loading"><div className="products-spinner" /><p>Loading shoes...</p></div>
   );
-  }
+
+  const visible = isLight ? shown.slice(0, 3) : shown.slice(0, limit);
+  const hasMore = !isLight && limit < shown.length;
 
   return (
     <>
-      <SEO
-        title="Solar Products for Kenya"
-        description="Browse Energen's solar product range, including panels, batteries, and energy systems built for Kenyan homes and businesses."
-        keywords="solar products Kenya, solar panels, battery storage, renewable energy products"
-      />
-      <div className="products-page">
+      {!isLight && (
+        <SEO
+          title="All Shoes"
+          description="Shop sneakers, Timberland boots, and office shoes in Nairobi. Real sizes, M-Pesa checkout, 24-hour delivery."
+          keywords="shoes Nairobi, sneakers Kenya, Timberland boots, office shoes, buy shoes online Kenya"
+        />
+      )}
+
+      <div className={`products-page ${isLight ? "products-page--light" : "products-page--full"}`}>
         <div className="products-header">
-          <h2>Our Products</h2>
-          <p>Our solar products are engineered for Kenyan conditions – stable output, weather‑resistant, and backed by expert support. Choose quality that pays for itself.
-          </p>
-          <h4>Reliable, durable, and built to last</h4>
-          <div className="searchbar">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search products..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+          <h2>{isLight ? "Trending Now" : "All Shoes"}</h2>
+          <p>{isLight ? "Best selling this week." : "Premium shoes for every occasion."}</p>
+
+          {!isLight && (
+            <div className="searchbar">
+              <input
+                className="search-input"
+                placeholder="Search by name or price…"
+                value={search}
+                onChange={(e) => { setSearch(e.target.value); setLimit(PAGE); }}
+              />
+            </div>
+          )}
           {hasMore && (
-            <button className="load-more-btn" onClick={loadMore}>
-              Load More
-            </button>
+            <button className="load-more-btn" onClick={() => setLimit((l) => l + PAGE)}>Load More</button>
           )}
         </div>
 
         <div className="products-grid">
-          {visibleProducts.map((product) => (
-            <div key={product.id} className="product-card">
-              {product.status === 'offer' && (
-                <span className="offer-badge">🔥 Offer</span>
-              )}
+          {visible.map((p) => (
+            <div key={p.id} className="product-card" onClick={() => navigate(`/product/${p.id}`)}>
+              {p.badge && <span className="offer-badge">{p.badge}</span>}
               <div className="product-image">
-                {product.image ? (
-                  <img src={product.image} alt={product.name} />
-                ) : (
-                  <div className="placeholder-image">No Image</div>
-                )}
+                {p.image ? <img src={p.image} alt={p.name} loading="lazy" /> : <div className="placeholder-image">SHOE IMG</div>}
               </div>
               <div className="product-info">
-                <h3>{product.name}</h3>
-                <p className="product-description">{product.description}</p>
-                <p className="product-price">KSH {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <h3>{p.name}</h3>
+                {p.rating != null && <p className="product-rating">⭐ {p.rating} ({p.reviews ?? 0})</p>}
+                <p className="product-price">KES {Number(p.price).toLocaleString()}</p>
               </div>
               <div className="product-actions">
                 <button
                   className="add-to-cart-btn"
-                  onClick={() => handleAddToCart(product)}
+                  onClick={(e) => { e.stopPropagation(); setCart((prev) => addToCart(prev, p)); }}
                 >
                   Add to Cart
                 </button>
@@ -120,14 +95,12 @@ const Products = () => {
           ))}
         </div>
 
-        {visibleProducts.length === 0 && (
+        {(error || visible.length === 0) && (
           <div className="no-products">
-            <p>No products found.</p>
+            <p>{error ? "Could not load shoes." : search ? `No shoes match "${search}".` : "No shoes available right now."}</p>
           </div>
         )}
       </div>
     </>
   );
-};
-
-export default Products;
+}

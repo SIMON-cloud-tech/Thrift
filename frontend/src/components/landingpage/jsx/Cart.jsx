@@ -1,25 +1,19 @@
-import { FaTimes, FaShoppingBag, FaWhatsapp } from 'react-icons/fa';
+import { FaTimes, FaShoppingBag } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { memo, useCallback } from 'react';
 import '../css/Cart.css';
-import { memo, useCallback, useState, useEffect } from 'react';
 import {
   incrementItem,
   decrementItem,
   removeFromCart,
   getCartTotal,
-  buildWhatsAppURL
+  DELIVERY_FEE,
 } from '../../../utils/CartUtil';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
-// ── Cart Item ──
 const CartItem = memo(({ item, onIncrement, onDecrement, onRemove }) => (
   <li className="cart-item">
     <div className="cart-item__thumb">
-      <img
-       src={item.image || '/placeholder.jpg'}
-        alt={item.name}
-        loading="lazy"
-      />
+      <img src={item.image || '/placeholder.jpg'} alt={item.name} loading="lazy" />
     </div>
     <div className="cart-item__details">
       <p className="cart-item__name">{item.name}</p>
@@ -44,36 +38,21 @@ const CartItem = memo(({ item, onIncrement, onDecrement, onRemove }) => (
 ));
 CartItem.displayName = 'CartItem';
 
-// ── Cart Drawer ──
 const Cart = ({ cart, setCart, isOpen, onClose }) => {
-  const [config, setConfig] = useState({ whatsappNumber: '', phoneNumber: '' });
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch(`${API_BASE}/config`)
-      .then(res => res.json())
-      .then(data => setConfig(data))
-      .catch(err => console.error('Failed to fetch config:', err));
-  }, []);
-
-  const handleIncrement = useCallback((id) => {
-    setCart(prev => incrementItem(prev, id));
-  }, [setCart]);
-
-  const handleDecrement = useCallback((id) => {
-    setCart(prev => decrementItem(prev, id));
-  }, [setCart]);
-
-  const handleRemove = useCallback((id) => {
-    setCart(prev => removeFromCart(prev, id));
-  }, [setCart]);
+  const handleIncrement = useCallback((id) => setCart(prev => incrementItem(prev, id)), [setCart]);
+  const handleDecrement = useCallback((id) => setCart(prev => decrementItem(prev, id)), [setCart]);
+  const handleRemove    = useCallback((id) => setCart(prev => removeFromCart(prev, id)), [setCart]);
 
   const handleCheckout = useCallback(() => {
-    if (cart.length === 0 || !config.whatsappNumber) return;
-    const url = buildWhatsAppURL(cart, config.whatsappNumber);
-    window.open(url, '_blank', 'noopener,noreferrer');
-  }, [cart, config.whatsappNumber]);
+    if (cart.length === 0) return;
+    onClose();
+    navigate('/checkout');
+  }, [cart.length, navigate, onClose]);
 
-  const total = getCartTotal(cart);
+  const subtotal = getCartTotal(cart);
+  const total = subtotal + DELIVERY_FEE;
 
   return (
     <>
@@ -96,12 +75,13 @@ const Cart = ({ cart, setCart, isOpen, onClose }) => {
             <FaTimes />
           </button>
         </div>
+
         <div className="cart-drawer__body">
           {cart.length === 0 ? (
             <div className="cart-empty">
               <FaShoppingBag className="cart-empty__icon" />
               <p>No items yet.</p>
-              <span>Hover a product and tap <strong>Add to Order</strong>.</span>
+              <span>Hover a product and tap <strong>Add to Cart</strong>.</span>
             </div>
           ) : (
             <ul className="cart-list">
@@ -117,25 +97,32 @@ const Cart = ({ cart, setCart, isOpen, onClose }) => {
             </ul>
           )}
         </div>
+
         {cart.length > 0 && (
           <div className="cart-drawer__footer">
-            <div className="cart-total">
-              <span className="cart-total__label">Total</span>
-              <span className="cart-total__value">
-                KES {total.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-              </span>
+            {/* SUMMARY */}
+            <div className="cart-summary">
+              <div className="cart-summary__row">
+                <span>Subtotal</span>
+                <span>KES {subtotal.toLocaleString()}</span>
+              </div>
+              <div className="cart-summary__row">
+                <span>Delivery Fee</span>
+                <span>KES {DELIVERY_FEE.toLocaleString()}</span>
+              </div>
+              <div className="cart-summary__row cart-summary__row--total">
+                <span>Total</span>
+                <span>KES {total.toLocaleString()}</span>
+              </div>
             </div>
-            <button
-              className="checkout-btn"
-              onClick={handleCheckout}
-              disabled={!config.whatsappNumber}
-            >
-              <FaWhatsapp />
-              Checkout via WhatsApp
+
+            <button className="checkout-btn" onClick={handleCheckout}>
+              Proceed to Checkout
             </button>
-            <a href={`tel:+${config.phoneNumber}`} className="call-btn">
-              📞 Call Us Directly
-            </a>
+
+            <Link to="/" className="continue-shopping" onClick={onClose}>
+              ← Continue Shopping
+            </Link>
           </div>
         )}
       </aside>

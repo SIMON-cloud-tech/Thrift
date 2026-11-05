@@ -1,0 +1,209 @@
+/* ==========================================================
+   Categories.css — consumes tokens from index.css
+   • Mobile: 1 card per row (landscape crop)
+   • Tablet+: 3 cards in a row (portrait crop)
+   • "Shop now" reveals on hover / stays visible on touch
+   ========================================================== */
+
+.categories {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+}
+
+/* ---------- Header ---------- */
+.categories__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.categories__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-ink);
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 768px) {
+  .categories__title {
+    font-size: 1.875rem;
+  }
+}
+
+.categories__view-all {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--transition);
+}
+
+.categories__view-all:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+/* ---------- Grid ---------- */
+.categories__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .categories__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* ---------- Card ---------- */
+.category-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-muted);
+  aspect-ratio: 3 / 2;
+  text-decoration: none;
+  color: #fff;
+  isolation: isolate;
+}
+
+@media (min-width: 768px) {
+  .category-card {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+.category-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-slow);
+}
+
+.category-card:hover .category-card__image,
+.category-card:focus-visible .category-card__image {
+  transform: scale(1.06);
+}
+
+/* Overlay — default + hover state */
+.category-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-overlay-dark);
+  transition: background var(--transition);
+}
+
+.category-card:hover .category-card__overlay {
+  background: var(--gradient-overlay-darker);
+}
+
+/* Content — title + CTA */
+.category-card__content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.25rem;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .category-card__content {
+    padding: 1.5rem;
+  }
+}
+
+.category-card__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+  .category-card__title {
+    font-size: 1.25rem;
+  }
+}
+
+/* Hover-reveal CTA */
+.category-card__cta {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-accent-bright);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.category-card:hover .category-card__cta,
+.category-card:focus-visible .category-card__cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Touch devices — always show CTA */
+@media (hover: none) {
+  .category-card__cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Keyboard focus */
+.category-card:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Skeleton ---------- */
+.category-card--skeleton {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--radius-md);
+  background: var(--gradient-shimmer);
+  background-size: 200% 100%;
+  animation: categories-shimmer 1.4s ease-in-out infinite;
+}
+
+@media (min-width: 768px) {
+  .category-card--skeleton {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+@keyframes categories-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---------- Empty state ---------- */
+.categories__empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .category-card__image,
+  .category-card__cta,
+  .category-card__overlay,
+  .category-card--skeleton {
+    transition: none;
+    animation: none;
+  }
+}

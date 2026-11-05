@@ -1,18 +1,15 @@
 import { useEffect, useRef } from 'react';
 import '../css/Story.css';
-import aboutImage from '/about.webp'; // Convert to WebP!
+import aboutImage from '/shoe.webp';
 
 const Story = () => {
   const sectionRef = useRef(null);
 
-  // Lazy load animations on scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('mvv-visible');
-          }
+          if (entry.isIntersecting) entry.target.classList.add('mvv-visible');
         });
       },
       { threshold: 0.1 }
@@ -26,20 +23,20 @@ const Story = () => {
 
   return (
     <div className="about-page">
-      {/* ── HERO / INTRO SECTION ── */}
+      {/* ── HERO / INTRO ── */}
       <section className="about-hero">
         <div className="about-hero-overlay">
-          <h1>About Energen</h1>
-          <p>Powering Kenya with sustainable solar solutions since 2010.</p>
+          <h1>About Drip Mtaani</h1>
+          <p>Nairobi's home for authentic street footwear, since day one.</p>
         </div>
       </section>
 
       {/* ── COMPANY INFO + IMAGE ── */}
       <section className="about-content">
         <div className="about-image">
-          <img 
-            src={aboutImage} 
-            alt="Energen Company" 
+          <img
+            src={aboutImage}
+            alt="Drip Mtaani Store"
             loading="lazy"
             decoding="async"
           />
@@ -47,25 +44,20 @@ const Story = () => {
         <div className="about-text">
           <h2>Who We Are</h2>
           <p>
-            <strong>Energen Systems & General Supplies Ltd.</strong>is a trusted solar energy company in Kenya 
-            specializing in solar lighting and installation, solar water pumps for farms in Thika and Gatundu,
-             solar hot water systems for households in Kiambu estates like Ruiru and Githunguri, and solar 
-             power backup solutions for Nairobi businesses in Westlands, Industrial Area, and Buruburu. 
-            Our expertise ensures reliable, affordable, and sustainable energy for both urban and rural communities.
+            <strong>Drip Mtaani</strong> is Nairobi's premier destination for
+            authentic street footwear. We curate sneakers, boots, and formal
+            shoes from the world's most sought-after brands — every pair
+            verified, every style on point. From the latest drops to timeless
+            classics, we bring the culture straight to your doorstep.
           </p>
           <p>
-            Founded in <strong>2020</strong>,Energen has rapidly expanded 
-            its services and successfully installed solar 
-            systems in over 500 homes, schools, 
-            and institutions across Nairobi, Kiambu, 
-            and Thika. From residential rooftops 
-            in Kasarani and South B, to commercial 
-            projects in Donholm and Kitengela, and 
-            rural installations in Limuru and Juja, 
-            we continue to power communities with clean energy while 
-            reducing electricity costs and promoting sustainable living.
+            Built for the streets, we serve everyone from sneakerheads chasing
+            grails to professionals who need a clean pair of leather shoes for
+            the office. Whether you're in Kilimani, Kasarani, Westlands, or
+            anywhere across Nairobi, our same-day delivery gets your kicks to
+            you fast. Countrywide deliveries available on request.
           </p>
-          <p className="tagline">⚡ Energy That Cares</p>
+          <p className="tagline">👟 Step Into The Culture</p>
         </div>
       </section>
 
@@ -74,23 +66,25 @@ const Story = () => {
         <div className="mvv-card">
           <h3>🎯 Mission</h3>
           <p>
-            Empowering communities to opt for a sustainable and greener lifestyle 
-            through innovative energy solutions.
+            To make authentic, premium footwear accessible to every drip lover
+            in Nairobi — without the fakes, without the markup, without the
+            hassle.
           </p>
         </div>
         <div className="mvv-card">
           <h3>🔭 Vision</h3>
           <p>
-            Dedicated to the execution of renewable energy projects focused 
-            in Kenya and East Africa.
+            To become East Africa's most trusted name in street footwear —
+            where every pair tells a story and every customer walks out
+            with confidence.
           </p>
         </div>
         <div className="mvv-card">
           <h3>⭐ Core Values</h3>
           <ul>
-            <li>Quality</li>
-            <li>Professionalism</li>
-            <li>Commitment</li>
+            <li>Authenticity</li>
+            <li>Style</li>
+            <li>Reliability</li>
           </ul>
         </div>
       </section>

@@ -1,0 +1,139 @@
+/* ==========================================================
+   WhyChooseUs.css — consumes tokens from index.css
+   Entrance via IntersectionObserver (data-visible="true")
+   ========================================================== */
+
+.why-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+/* ---------- Header ---------- */
+.why-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  margin: 0 0 0.75rem;
+}
+
+.why-title {
+  font-size: 2.25rem;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  color: var(--color-ink);
+  margin: 0 0 3.5rem;
+}
+
+@media (min-width: 768px)  { .why-title { font-size: 3rem; } }
+@media (min-width: 1024px) { .why-title { font-size: 3.5rem; } }
+
+/* ---------- Grid ---------- */
+.why-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.why-card {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 1.75rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+
+  /* entrance state */
+  opacity: 0;
+  translate: 0 24px;
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    translate 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.why-card[data-visible='true'] {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: var(--delay, 0ms), var(--delay, 0ms), 0ms, 0ms;
+}
+
+.why-card[data-visible='true']:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
+}
+
+@media (min-width: 640px)  { .why-card { flex: 1 1 calc(50% - 0.625rem); } }
+@media (min-width: 1024px) { .why-card { flex: 1 1 0; } }
+
+/* ---------- Icon ---------- */
+.why-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  transition: transform var(--transition-slow), background var(--transition-slow);
+}
+
+.why-card[data-visible='true']:hover .why-card__icon {
+  transform: scale(1.08) rotate(-4deg);
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* ---------- Text ---------- */
+.why-card__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin: 0 0 0.625rem;
+}
+
+.why-card__desc {
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 26ch;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 639px) {
+  .why-section {
+    padding: 3rem 1rem;
+  }
+  .why-title {
+    font-size: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .why-grid { gap: 1rem; }
+  .why-card { padding: 2rem 1.25rem; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .why-card,
+  .why-card[data-visible='true'] {
+    opacity: 1;
+    translate: 0 0;
+    transition: none;
+  }
+  .why-card__icon,
+  .why-card[data-visible='true']:hover .why-card__icon {
+    transition: none;
+    transform: none;
+  }
+}

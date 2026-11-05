@@ -39,9 +39,9 @@ const BlogDetail = () => {
     <>
       <SEO
         title={blog.title}
-        description={blog.description || 'Energen solar insights and article details.'}
+        description={blog.description}
         ogImage={blog.image}
-        keywords={blog.keywords || 'solar blog, renewable energy, Kenya'}
+        keywords={blog.keywords}
       />
       <div className="blog-detail">
       {/* Hero / Image */}

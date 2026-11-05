@@ -57,10 +57,10 @@ const BlogSection = () => {
   return (
     <>
       <SEO
-        title="Solar Insights & News"
-        description="Read Energen's latest solar industry insights, energy-saving tips, and renewable energy news for Kenya."
-        keywords="solar blog, renewable energy blog, solar news Kenya, energy tips"
-      />
+      title="Shoe Style & Sneaker News"
+      description="Sneaker culture, styling tips, restock alerts, and street footwear news from Drip Mtaani — Nairobi's home of authentic kicks."
+      keywords="sneaker blog Kenya, shoe style tips Nairobi, sneaker drops Kenya, street footwear blog, sneaker culture Nairobi, Drip Mtaani blog"
+     />
       <section className="blog-section">
       {/* TOP ROW: Title + Load More */}
       <div className="blog-header">

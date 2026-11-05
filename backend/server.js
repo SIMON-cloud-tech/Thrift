@@ -1,122 +1,113 @@
 require('dotenv').config();
 
 // ==================== IMPORTS ====================
-
-// Third-party packages
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const connectDB = require('./config/db'); // MongoDB connection logic
+const multer = require('multer');
+const connectDB = require('./config/db');
 
-// Route modules — safe to require now, since .env is already loaded above
+// Route modules
 const authRoutes = require('./routes/authRoute');
 const resetRoutes = require('./routes/resetRoute');
-const inventoryRoutes = require('./routes/inventoryRoute');
+const productRoutes = require('./routes/inventoryRoute'); // Renamed variable for clarity
 const blogRoutes = require('./routes/blogRoute');
-const projectRoutes = require('./routes/projectRoute');
 const testimonialsRoutes = require('./routes/testimonialRoute');
 const dashboardRoutes = require('./routes/dashboardRoute');
 const chatbotRoutes = require('./routes/chatBotRoute');
+const configRoutes = require('./routes/configRoute');
 
 // ==================== APP SETUP ====================
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// CORS Configuration
 const FRONTEND_ORIGIN = process.env.NODE_ENV === 'production'
-  ? 'https://energen.co.ke'
+  ? 'https://thriftstore.co.ke'
   : 'http://localhost:5173';
 
-// Render (and most hosts) sit behind a reverse proxy. Without this, Express
-// sees every request as coming from the proxy's internal IP, which breaks
-// express-rate-limit (everyone gets rate-limited together) and req.ip generally.
-app.set('trust proxy', 1);
+app.set('trust proxy', 1); // Required for Render/Heroku rate limiting & IP detection
 
-// ==================== CORE MIDDLEWARE ====================
-
+// ==================== MIDDLEWARE ====================
 app.use(cors({
   origin: FRONTEND_ORIGIN,
-  credentials: true // allows the auth cookie to be sent cross-origin
+  credentials: true // Allows cookies to be sent cross-origin
 }));
 
 app.use(express.json());
 app.use(cookieParser());
 
 // ==================== STATIC FILES ====================
-
-// Uploaded images — public, with explicit CORS headers for <img> tags loaded from the frontend origin.
-// path.join(__dirname, 'uploads') resolves relative to THIS file's location (backend/),
-// matching how uploadMiddleware.js locates the same folder — safe regardless of
-// what directory the process was started from.
+// Serve uploaded images with CORS headers so the frontend <img> tags can read them
 app.use('/uploads', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', FRONTEND_ORIGIN);
   res.header('Access-Control-Allow-Credentials', 'true');
   next();
 }, express.static(path.join(__dirname, 'uploads')));
 
-// Built frontend (index.html, JS/CSS bundles) — only relevant in production.
+// Serve the built React frontend in production
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ==================== PUBLIC ROUTES ====================
-// No login required to reach these routers. Any write-protection (POST/PUT/DELETE)
-// is scoped per-route inside each route file, not at the mount level.
-
-app.use('/api', authRoutes);              // register, login, /profile (protected inside), logout
-app.use('/api/reset', resetRoutes);       // password reset via OTP — must stay reachable while logged out
-app.use('/api/inventory', inventoryRoutes);
+// ==================== API ROUTES ====================
+// Public routes
+app.use('/api', authRoutes);              // /api/register, /api/login, /api/logout, /api/profile
+app.use('/api/reset', resetRoutes);
+app.use('/api/products', productRoutes);  // Changed from /api/inventory to match frontend
 app.use('/api/blogs', blogRoutes);
-app.use('/api/projects', projectRoutes);
 app.use('/api/testimonials', testimonialsRoutes);
 app.use('/api/chatbot', chatbotRoutes);
+app.use('/api/config', configRoutes);
 
-app.get('/api/config', (req, res) => {
-  res.json({
-    whatsappNumber: process.env.VITE_WHATSAPP_NUMBER || '254727713219',
-    phoneNumber: process.env.VITE_WHATSAPP_NUMBER || '254727713219'
-  });
-});
+// Protected dashboard routes
+app.use('/api/dashboard', dashboardRoutes);
 
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK' });
 });
 
-// ==================== PROTECTED ROUTES ====================
+// ==================== ERROR HANDLING ====================
 
-// Mounted at its OWN prefix (/api/dashboard), not the shared /api prefix used above.
-// This is deliberate: if a route file inside here ever adds an unscoped
-// `router.use(authMiddleware)`, it stays contained to /api/dashboard/* and
-// can never shadow the public routes mounted at /api/* above.
-app.use('/api/dashboard', dashboardRoutes);
-
-// ==================== CLIENT-SIDE ROUTING CATCH-ALL ====================
-
-app.use((req, res, next) => {
-  if (req.path.startsWith('/api')) return next();
-  if (req.path.startsWith('/uploads')) return next();
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// ==================== 404 FOR UNMATCHED API ROUTES ====================
-
+// 1. Catch-all for unmatched API routes (returns JSON, not React HTML)
 app.use('/api', (req, res) => {
-  res.status(404).json({ message: 'Not found' });
+  res.status(404).json({ message: 'API endpoint not found' });
 });
 
-// ==================== GLOBAL ERROR HANDLER ====================
+// 2. Client-side routing catch-all (sends React index.html for any other route)
+app.use((req, res, next) => {
+  if (req.method === 'GET') {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  } else {
+    next();
+  }
+});
 
+// 3. Global Error Handler (Handles Multer upload errors + general server errors)
 app.use((err, req, res, next) => {
-  console.error('❌ Unhandled error:', err);
-  res.status(500).json({ message: 'Server error', error: err.message });
+  // Handle Multer specific errors (File too large, wrong format, etc.)
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({ 
+      message: `Upload Error: ${err.message}`,
+      field: err.field 
+    });
+  }
+  
+  // Handle custom file filter errors
+  if (err.message && err.message.includes('Only images')) {
+    return res.status(400).json({ message: err.message });
+  }
+
+  // Handle everything else
+  console.error('❌ Unhandled Server Error:', err);
+  res.status(500).json({ message: 'Internal Server Error' });
 });
 
 // ==================== START SERVER ====================
-
-// Connect to MongoDB FIRST, and only start listening once the connection is confirmed.
-// This prevents a window where the server is accepting requests before the
-// database is actually reachable, which would make early requests fail or hang.
+// Connect to MongoDB first, then start the server
 connectDB().then(() => {
   app.listen(PORT, () => {
     console.log(`🚀 Backend running on http://localhost:${PORT}`);
+    console.log(`🌍 Accepting requests from: ${FRONTEND_ORIGIN}`);
   });
 });

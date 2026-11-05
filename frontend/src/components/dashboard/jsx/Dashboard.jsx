@@ -1,152 +1,93 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   FiPackage, FiEdit, FiBox, FiSettings,
   FiLogOut, FiSun, FiMoon,
-  FiMenu, FiX, FiFolder, FiStar,    
+  FiMenu, FiX, FiStar,
 } from 'react-icons/fi';
 import '../css/Dashboard.css';
 import ProductManage from './ProductManage.jsx';
 import BlogManage from './BlogManage.jsx';
 import Inventory from './Inventory.jsx';
-import ProjectManage from './ProjectManage.jsx';
 import TestimonialsManage from './TestimonialManage.jsx';
 
-const MENU_ICONS = {
-  products: FiPackage,
-  blog: FiEdit,
-  inventory: FiBox,
-  projects: FiFolder,
-  testimonials: FiStar,    
-};
+const MENU = [
+  { id: 'products',     label: 'Products',     icon: FiPackage, component: ProductManage },
+  { id: 'blog',         label: 'Blog',         icon: FiEdit,    component: BlogManage },
+  { id: 'inventory',    label: 'Inventory',    icon: FiBox,     component: Inventory },
+  { id: 'testimonials', label: 'Testimonials', icon: FiStar,    component: TestimonialsManage },
+];
 
 const Dashboard = ({ setUser }) => {
   const navigate = useNavigate();
 
-  const [activeMenuItem, setActiveMenuItem] = useState('products');
+  const [active, setActive] = useState('products');
   const [theme, setTheme] = useState('light');
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-
-  const toggleMobileSidebar = () => setMobileSidebarOpen(!mobileSidebarOpen);
-  const closeMobileSidebar = () => setMobileSidebarOpen(false);
-
-  const menuItems = [
-    { id: 'products', label: 'Product Management' },
-    { id: 'blog', label: 'Blog Management' },
-    { id: 'inventory', label: 'Inventory' },
-    {id: 'projects', label: 'Project Management'},
-    { id: 'testimonials', label: 'Testimonials' },
-  ];
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await fetch('/api/profile', {
-          credentials: 'include' // sends the httpOnly cookie
-        });
-        if (!res.ok) {
-          if (res.status === 401) {
-            navigate('/auth');
-            return;
-          }
-          throw new Error('Failed to fetch profile');
-        }
-        const data = await res.json();
-        setProfile(data);
-      } catch (err) {
-        console.error('Failed to load profile:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProfile();
+    fetch('/api/profile', { credentials: 'include' })
+      .then((r) => {
+        if (r.status === 401) { navigate('/auth'); return null; }
+        return r.ok ? r.json() : Promise.reject();
+      })
+      .then((d) => d && setProfile(d))
+      .catch(() => navigate('/auth'))
+      .finally(() => setLoading(false));
   }, [navigate]);
 
   const handleLogout = async () => {
-    try {
-      await fetch('/api/logout', {
-        method: 'POST',
-        credentials: 'include'
-      });
-    } catch (err) {
-      console.error('Logout error:', err);
-    }
+    try { await fetch('/api/logout', { method: 'POST', credentials: 'include' }); } catch {}
     setUser(null);
     navigate('/auth');
   };
 
-  const renderContentPanel = () => {
-    switch (activeMenuItem) {
-      case 'products':
-        return <ProductManage />;
-      case 'blog':
-        return <BlogManage />;
-      case 'inventory':
-        return <Inventory />;
-      case 'projects':
-        return <ProjectManage />
-      case 'testimonials':
-        return <TestimonialsManage />
-      default:
-        return <p>Section not found</p>;
-    }
+  const getGreeting = () => {
+    const h = new Date().getHours();
+    return h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
   };
 
   if (loading) return <div className="dashboard-status"><p>Loading dashboard...</p></div>;
 
-  const activeLabel = menuItems.find((item) => item.id === activeMenuItem)?.label || 'Dashboard';
-
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 17) return 'Good Afternoon';
-    return 'Good Evening'; 
-  };
+  const activeMenu = MENU.find((m) => m.id === active);
+  const ActiveComponent = activeMenu?.component;
 
   return (
     <div className={`dashboard ${theme}`}>
-     {/* Mobile top bar — full-width strip that houses the hamburger */}
-    <div className="mobile-topbar">
-     <button className="mobile-hamburger" onClick={toggleMobileSidebar}
-       aria-label={mobileSidebarOpen ? 'Close sidebar' : 'Open sidebar'}
-      >
-      {mobileSidebarOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-     </button>
-    </div>
+      <div className="mobile-topbar">
+        <button
+          className="mobile-hamburger"
+          onClick={() => setSidebarOpen((v) => !v)}
+          aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+        >
+          {sidebarOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+        </button>
+      </div>
 
-      {/* Sidebar overlay */}
       <div
-        className={`sidebar-overlay ${mobileSidebarOpen ? 'visible' : ''}`}
-        onClick={closeMobileSidebar}
+        className={`sidebar-overlay ${sidebarOpen ? 'visible' : ''}`}
+        onClick={() => setSidebarOpen(false)}
       />
 
-      {/* Sidebar */}
-      <aside className={`sidebar ${mobileSidebarOpen ? 'sidebar-open' : ''}`}>
+      <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
         <div className="sidebar-header">
-          <h2>Dashboard</h2>
+          <h2>Drip Mtaani</h2>
         </div>
 
         <nav>
-          {menuItems.map((item) => {
-            const Icon = MENU_ICONS[item.id] || FiSettings;
-            return (
-              <button
-                key={item.id}
-                className={`sidebar-item ${activeMenuItem === item.id ? 'active' : ''}`}
-                onClick={() => {
-                  setActiveMenuItem(item.id);
-                  closeMobileSidebar();
-                }}
-                title={item.label}
-              >
-                <span className="sidebar-icon"><Icon size={20} /></span>
-                <span className="sidebar-label">{item.label}</span>
-              </button>
-            );
-          })}
+          {MENU.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              className={`sidebar-item ${active === id ? 'active' : ''}`}
+              onClick={() => { setActive(id); setSidebarOpen(false); }}
+              title={label}
+            >
+              <span className="sidebar-icon"><Icon size={20} /></span>
+              <span className="sidebar-label">{label}</span>
+            </button>
+          ))}
         </nav>
 
         <div className="sidebar-footer">
@@ -154,7 +95,10 @@ const Dashboard = ({ setUser }) => {
             <span className="sidebar-icon"><FiLogOut size={20} /></span>
             <span className="sidebar-label">Logout</span>
           </button>
-          <button className="theme-toggle" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+          <button
+            className="theme-toggle"
+            onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
+          >
             <span className="sidebar-icon">
               {theme === 'light' ? <FiMoon size={20} /> : <FiSun size={20} />}
             </span>
@@ -163,27 +107,26 @@ const Dashboard = ({ setUser }) => {
         </div>
       </aside>
 
-      {/* Main content */}
       <main className="dashboard-main">
-        {/* Welcome banner — fixed row, never scrolls, never shrinks */}
         <section className="dashboard-row dashboard-row-fixed">
           <div className="welcome-banner">
-            <h1 className="welcome-title">{getGreeting()},  {profile?.name || 'User'}! 👋</h1>
+            <h1 className="welcome-title">
+              {getGreeting()}, {profile?.name || 'Admin'}! 👋
+            </h1>
           </div>
         </section>
 
-        {/* Content panel — the ONLY part of the page that scrolls internally */}
         <section className="dashboard-row dashboard-row-scrollable">
           <div className="content-panel full-width">
-            <h3>{activeLabel}</h3>
-            {renderContentPanel()}
+            <h3>{activeMenu?.label || 'Dashboard'}</h3>
+            {ActiveComponent ? <ActiveComponent /> : <p>Section not found</p>}
           </div>
         </section>
 
         <footer className="dashboard-footer">
-          <p>© {new Date().getFullYear()} Energen Systems &amp; General Supplies Ltd. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} Drip Mtaani. All Rights Reserved.</p>
           <Link to="/" className="dashboard-footer-link">
-            <p>Energy That Cares ☀️</p>
+            <p>Step Into The Culture 👟</p>
           </Link>
         </footer>
       </main>

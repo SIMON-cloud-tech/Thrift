@@ -1,148 +1,191 @@
-* {
-  padding: 0;
-  margin: 0;
+/* ==========================================================
+   Hero.css — token-based
+   Hero CTA (btn / btn-primary) scoped to .hero so it does
+   not override the base button styles in index.css
+   ========================================================== */
+
+.hero,
+.hero *,
+.hero *::before,
+.hero *::after {
   box-sizing: border-box;
 }
 
+/* ---------- Shell ---------- */
 .hero {
-  height: 90vh;
-  min-height: 500px;
-  background: url('/solarbg.webp') center/cover no-repeat;
   position: relative;
+  isolation: isolate;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  transform: translateZ(0);
-  will-change: transform;
-  image-rendering: auto;
+  height: 85vh;
+  height: 85svh;
+  min-height: 520px;
+  max-height: 820px;
+  overflow: hidden;
+  background: var(--color-navy);   /* shows until the first video frame loads */
+  color: #fff;
   opacity: 0;
-  animation: heroFadeIn 0.8s ease forwards;
+  animation: hero-fade-in 0.8s ease forwards;
 }
 
-@keyframes heroFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(1.02);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+@keyframes hero-fade-in {
+  to { opacity: 1; }
 }
 
-.hero-overlay {
+/* ---------- Video ---------- */
+.hero-video {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: translateZ(0);
-  will-change: opacity;
+  object-fit: cover;
 }
 
+/* ---------- Shade: strong left → clear right ---------- */
+.hero-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(5, 10, 25, 0.78) 0%,
+    rgba(5, 10, 25, 0.5) 42%,
+    rgba(5, 10, 25, 0.05) 100%
+  );
+}
+
+/* ---------- Blur: masked backdrop behind the text ---------- */
+.hero-blur {
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 2;
+  width: 60%;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  -webkit-mask-image: linear-gradient(to right, #000 55%, transparent);
+  mask-image: linear-gradient(to right, #000 55%, transparent);
+  pointer-events: none;
+}
+
+/* ---------- Content ---------- */
 .hero-content {
-  max-width: 800px;
-  padding: 2rem;
-  color: white;
-  transform: translateY(30px);
+  position: relative;
+  z-index: 3;
+  width: min(100%, 680px);
+  padding: 2rem max(1.5rem, 6vw);
+  text-align: left;
   opacity: 0;
-  animation: contentSlideUp 0.8s ease 0.3s forwards;
+  transform: translateY(30px);
+  animation: hero-content-slide-up 0.8s ease 0.3s forwards;
 }
 
-@keyframes contentSlideUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
+@keyframes hero-content-slide-up {
   to {
-    transform: translateY(0);
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 .hero-title {
-  font-size: 2.8rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  backface-visibility: hidden;
+  margin: 0 0 1rem;
+  font-size: clamp(2.2rem, 5.5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+}
+
+.hero-title .highlight {
+  color: var(--color-accent-on-dark);
 }
 
 .hero-subtitle {
-  font-size: 1.2rem;
+  max-width: 460px;
+  margin: 0 0 1.25rem;
+  font-size: 1.15rem;
   line-height: 1.6;
-  margin-bottom: 1.5rem;
-  opacity: 0.9;
-  backface-visibility: hidden;
+  opacity: 0.95;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
 }
 
 .marketing-strip {
-  font-size: 1.1rem;
-  font-weight: 400;
-  letter-spacing: 1px;
-  margin-bottom: 2rem;
-  color: #f1c40f;
+  margin: 0 0 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--color-accent-bright);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
 }
 
+/* ---------- CTA wrapper ---------- */
 .hero-cta {
   display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
 }
 
-.btn {
-  padding: 0.75rem 2rem;
+/* ---------- Hero buttons — scoped to .hero ---------- */
+.hero .btn {
+  padding: 0.95rem 2.5rem;
   border: none;
-  border-radius: 30px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
-  text-decoration: none;
-  will-change: transform;
+  transition:
+    transform var(--transition),
+    background var(--transition),
+    box-shadow var(--transition);
 }
 
-.btn-primary {
-  background: #f39c12;
-  color: #1a2a6c;
+.hero .btn-primary {
+  background: var(--color-accent-on-dark);
+  color: var(--color-ink);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
 }
 
-.btn-primary:hover {
-  background: #e67e22;
-  transform: scale(1.05);
+.hero .btn-primary:hover {
+  background: var(--color-accent-on-dark-pressed);
+  transform: translateY(-2px) scale(1.04);
 }
 
-.btn-secondary {
-  background: transparent;
-  color: white;
-  border: 2px solid white;
+.hero .btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
 }
 
-.btn-secondary:hover {
-  background: white;
-  color: #1a2a6c;
-  transform: scale(1.05);
+/* ---------- Tablet ---------- */
+@media (max-width: 1024px) {
+  .hero-blur {
+    width: 72%;
+  }
 }
 
-/* ── Responsive ── */
+/* ---------- Mobile ---------- */
 @media (max-width: 768px) {
   .hero {
-    height: 70vh;
-    min-height: 400px;
+    align-items: flex-end;
+    height: 78vh;
+    height: 78svh;
+    min-height: 460px;
+  }
+
+  .hero-shade {
+    background: linear-gradient(
+      180deg,
+      rgba(5, 10, 25, 0) 0%,
+      rgba(5, 10, 25, 0.15) 50%,
+      rgba(5, 10, 25, 0.65) 100%
+    );
+  }
+
+  .hero-blur {
+    display: none;
   }
 
   .hero-content {
-    padding: 1.5rem;
-  }
-
-  .hero-title {
-    font-size: 2rem;
+    width: 100%;
+    padding: 1.5rem 1.25rem 2.25rem;
   }
 
   .hero-subtitle {
@@ -150,57 +193,37 @@
   }
 
   .marketing-strip {
+    margin-bottom: 1.5rem;
     font-size: 0.9rem;
   }
 
-  .btn {
-    padding: 0.6rem 1.5rem;
-    font-size: 0.9rem;
+  .hero .btn {
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .hero-content {
-    padding: 1rem;
-    max-width: 100%;
-  }
-
-  .hero-title {
-    font-size: 1.4rem;
-    line-height: 1.3;
-    word-break: break-word;
-  }
-
-  .hero-subtitle {
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-
-  .marketing-strip {
-    font-size: 0.8rem;
-    letter-spacing: 0.5px;
-  }
-
   .hero-cta {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
   }
-
-  .btn {
-    width: 80%;
+  .hero .btn {
+    width: 100%;
   }
 }
 
 @media (max-width: 360px) {
-  .hero-title {
-    font-size: 1.2rem;
-  }
-
-  .hero-subtitle {
-    font-size: 0.85rem;
-  }
-
   .marketing-strip {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero,
+  .hero-content {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }

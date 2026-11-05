@@ -1,0 +1,355 @@
+/* ==========================================================
+   Checkout.css — consumes tokens from index.css
+   ========================================================== */
+
+/* ---------- Page ---------- */
+.checkout {
+  max-width: 70%;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+  color: var(--color-ink);
+}
+
+.checkout__title {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 0 0 2rem;
+  color: var(--color-ink);
+}
+
+.checkout__form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ---------- Fieldsets ---------- */
+.checkout__fieldset {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin: 0;
+}
+
+.checkout__legend {
+  padding: 0 0.5rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+}
+
+/* ---------- Labels + inputs ---------- */
+.checkout__label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink-soft);
+  margin-bottom: 1rem;
+}
+
+.checkout__label:last-child {
+  margin-bottom: 0;
+}
+
+.checkout__label input {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.checkout__label input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-ring);
+}
+
+/* ---------- Payment radios ---------- */
+.checkout__radios {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.checkout__radio {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.checkout__radio.is-active {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.checkout__radio input {
+  accent-color: var(--color-accent);
+}
+
+/* ---------- M-Pesa card ---------- */
+.mpesa-card {
+  margin-top: 0.5rem;
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.mpesa-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-success-strong);
+  margin: 0 0 1rem;
+}
+
+.mpesa-card__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed var(--color-success-border);
+}
+
+.mpesa-card__rows > div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.mpesa-card__rows span {
+  color: var(--color-ink-soft);
+}
+
+.mpesa-card__rows strong {
+  color: var(--color-ink);
+}
+
+.mpesa-card__subtitle {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin: 0 0 0.5rem;
+}
+
+.mpesa-card__steps {
+  font-size: 0.875rem;
+  color: var(--color-ink-soft);
+  line-height: 1.7;
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+}
+
+.mpesa-card__note {
+  font-size: 0.8125rem;
+  color: var(--color-success-strong);
+  background: var(--color-bg);
+  border-left: 3px solid var(--color-success);
+  padding: 0.625rem 0.875rem;
+  border-radius: var(--radius-sm);
+  margin: 0;
+}
+
+.mpesa-card__loading {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  font-style: italic;
+  margin: 1rem 0 0;
+}
+
+/* ---------- Order summary ---------- */
+.checkout__summary {
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.checkout__summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  padding: 0.35rem 0;
+}
+
+.checkout__summary-row--total {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  border-top: 1px solid var(--color-line);
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+/* ---------- Submit ---------- */
+.checkout__submit {
+  padding: 1rem 1.5rem;
+  background: var(--color-ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.checkout__submit:hover:not(:disabled) {
+  background: var(--color-accent);
+}
+
+.checkout__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.checkout__submit:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ==========================================================
+   SUCCESS VIEW
+   ========================================================== */
+.checkout-success {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+  text-align: center;
+  color: var(--color-ink);
+}
+
+.checkout-success__icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  background: var(--color-success-soft);
+  color: var(--color-success);
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkout-success h2 {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+  color: var(--color-ink);
+}
+
+.checkout-success p {
+  color: var(--color-ink-soft);
+  line-height: 1.7;
+  margin: 0 0 0.75rem;
+}
+
+.checkout-success__order {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: var(--color-accent-soft);
+  border-radius: var(--radius-sm);
+  color: var(--color-accent-hover);
+  margin: 1rem 0;
+}
+
+.checkout-success__btn {
+  margin-top: 2rem;
+  padding: 0.875rem 2rem;
+  background: var(--color-ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.checkout-success__btn:hover {
+  background: var(--color-accent);
+}
+
+.checkout-success__btn:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ==========================================================
+   EMPTY CART GUARD
+   ========================================================== */
+.checkout-empty {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.checkout-empty button {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.75rem;
+  background: var(--color-ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.checkout-empty button:hover {
+  background: var(--color-accent);
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+@media (max-width: 600px) {
+  .checkout {
+    padding: 2rem 1rem 4rem;
+  }
+  .checkout__title {
+    font-size: 1.5rem;
+  }
+  .checkout__fieldset {
+    padding: 1.25rem;
+  }
+  .checkout-success h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .checkout__label input,
+  .checkout__radio,
+  .checkout__submit,
+  .checkout-success__btn,
+  .checkout-empty button {
+    transition: none;
+  }
+}

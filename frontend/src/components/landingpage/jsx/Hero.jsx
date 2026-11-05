@@ -1,69 +1,80 @@
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/Hero.css';
 
+// ── Constants ──
+const VIDEO_SRC = '/shoe.mp4';            // put your video in the public folder
+const SHOP_PATH = '/collections/sneakers'; // where "Shop Now" goes
+
 const Hero = () => {
   const navigate = useNavigate();
-  const heroRef = useRef(null);
+  const videoRef = useRef(null);
 
-  // Lazy load animation on scroll
+  // Play only while the hero is on screen, and not at all if the visitor prefers reduced motion
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('hero-visible');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
+    const video = videoRef.current;
+    if (!video) return;
 
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      video.pause();
+      return;
     }
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.muted = true; // some browsers ignore the attribute for autoplay
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(video);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section className="hero" ref={heroRef}>
-      <div className="hero-overlay">
-        <div className="hero-content">
-          <h2 className="hero-title">
-            Power Your Future with Clean Solar Energy
-          </h2>
+    <section className="hero">
+      {/* ── Background video ── */}
+      <video
+        ref={videoRef}
+        className="hero-video"
+        src={VIDEO_SRC}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      />
+
+      {/* ── Darkening + blur, left side only; the right side stays clear ── */}
+      <div className="hero-shade" aria-hidden="true" />
+      <div className="hero-blur" aria-hidden="true" />
+
+      {/* ── Text, left ── */}
+      <div className="hero-content">
+        <h1 className="hero-title">
+          Step Into <span className="highlight">Fresh Style</span>
+        </h1>
 
         <p className="hero-subtitle">
-       Energen delivers high‑quality solar solutions across Kenya —
-       from Nairobi estates like Umoja, Donholm, Syokimau, Imara Daima,
-       and Kitengela, to communities in Wajir and beyond. Whether for
-       homes or businesses, we help you cut electricity costs, shrink
-       your carbon footprint, and achieve true energy independence.
-       </p>
+          Hand-picked sneakers and Timberlands, ready for everyday wear.
+        </p>
 
-          <h4 className="marketing-strip">
-            🌍 Eco‑Friendly  •  ⚡ Stable Power  •  💰 Lower Bills  •  🔋 Reliable
-          </h4>
+        <p className="marketing-strip">👟 Sneakers • 🥾 Timberlands • 🛒 Shop Online</p>
 
-          <div className="hero-cta">
-            <button
-              className="btn btn-primary"
-              onClick={() => navigate('/products')}
-            >
-              Explore Solutions
-            </button>
-            <button
-              className="btn btn-secondary"
-              onClick={() => navigate('/contact')}
-            >
-              Contact Us
-            </button>
-          </div>
+        <div className="hero-cta">
+          <button className="btn btn-primary" onClick={() => navigate(SHOP_PATH)}>
+            Shop Now →
+          </button>
         </div>
       </div>
     </section>
   );
 };
 
-export default Hero;
+export default memo(Hero);

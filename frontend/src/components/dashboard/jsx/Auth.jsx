@@ -76,11 +76,9 @@ const Auth = ({ setUser }) => {
         <div className="logo-container">
           <FiSun size={80} color="#f39c12" />
         </div>
-       <h1>Energen</h1>
+       <h1>Drip Mtaani</h1>
         <p>
-          Power your world with clean, reliable solar energy. 
-          Explore our products, projects, and expert solar solutions 
-          designed for Kenyan homes and businesses.
+          Nairobi's premier destination for authentic street footwear. Step into the culture
         </p>
       </div>
 

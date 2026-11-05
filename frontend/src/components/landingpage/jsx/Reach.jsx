@@ -1,189 +1,82 @@
-import { useState, useCallback, memo } from 'react';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaGlobe } from 'react-icons/fa';
+import { useState } from 'react';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 import '../css/Contact.css';
 
-// ── Config ──
-const WA_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '254727713219';
-const MAP_EMBED =
-  import.meta.env.VITE_MAP_EMBED_URL || 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.816031465158!2d36.82632290000001!3d-1.2843004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f11938e8142e5%3A0xb86e39e564106f6f!2sCookie%20House!5e0!3m2!1sen!2ske!4v1784716867725!5m2!1sen!2ske';
-
-// ── Contact Details ──
-const CONTACT_DETAILS = [
-  {
-    id: 'location',
-    label: 'Locations',
-    value: 'Nairobi CBD Cookie House',
-    href: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.816031465158!2d36.82632290000001!3d-1.2843004!2m3!1f0!2f0!3f0!3m2! 1i1024!2i768!4f13.1!3m3!1m2!1s0x182f11938e8142e5%3A0xb86e39e564106f6f!2sCookie%20House!5e0!3m2!1sen!2ske!4v1784716867725!5m2!1sen!2ske',
-    icon: <FaMapMarkerAlt />,
-  },
-  {
-    id: 'phone',
-    label: 'Phone / WhatsApp',
-    value: '+254 727 713 219',
-    href: 'tel:+254727713219',
-    icon: <FaPhone />,
-  },
-  {
-    id: 'email',
-    label: 'Email',
-    value: 'energensolar15@gmail.com',
-    href: 'mailto:energensolar15@gmail.com',
-    icon: <FaEnvelope />,
-  },
-  {
-    id: 'website',
-    label: 'Website',
-    value: 'www.energen.co.ke',
-    href: 'https://www.energen.co.ke',
-    icon: <FaGlobe />,
-  },
-];
-
-const WORKING_HOURS = [
-  { day: 'Monday – Friday', hours: '8:00 AM – 6:00 PM' },
-  { day: 'Saturday', hours: '9:00 AM – 4:00 PM' },
-  { day: 'Sunday', hours: 'Closed' },
-];
-
-// ── Row Component ──
-const DetailRow = memo(({ icon, label, value, href }) => (
-  <a href={href} className="detail-row" target="_blank" rel="noopener noreferrer">
-    <span className="detail-row__icon">{icon}</span>
-    <span>
-      <strong>{label}</strong>
-      <p>{value}</p>
-    </span>
-  </a>
-));
-
-const EMPTY_FORM = { name: '', phone: '', email: '', message: '' };
+const WA_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '254789679161';
 
 const Contact = () => {
-  const [form, setForm] = useState(EMPTY_FORM);
+  const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = useCallback((e) => {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  }, []);
+  const details = [
+    { icon: <FaMapMarkerAlt />, label: 'Location',        value: 'Nairobi, Kenya' },
+    { icon: <FaPhone />,        label: 'Phone / WhatsApp', value: '+254 789 679 161', href: 'tel:+254789679161' },
+    { icon: <FaEnvelope />,     label: 'Email',           value: 'support.dripmtaani@gmail.com', href: 'mailto:support.dripmtaani@gmail.com' },
+  ];
 
-  const handleSubmit = useCallback((e) => {
+  const hours = [
+    { day: 'Monday – Friday', time: '8:00 AM – 6:00 PM' },
+    { day: 'Saturday',        time: '9:00 AM – 4:00 PM' },
+    { day: 'Sunday',          time: 'Closed' },
+  ];
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    const text = `
-Hi Energen Team 👋
-
-I'm interested in solar solutions.
-
-My details:
-• Name: ${form.name}
-• Phone: ${form.phone}
-• Email: ${form.email || 'N/A'}
-
-My enquiry:
-${form.message}
-
-Please advise on availability, pricing, and installation timeline.
-
-Looking forward to your reply ☀️
-`;
-
-    const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-
+    const text = `Hi Drip Mtaani Team 👋\n\nI'm interested in a pair of shoes.\n\n• Name: ${form.name}\n• Phone: ${form.phone}\n• Email: ${form.email || 'N/A'}\n\nMy enquiry:\n${form.message}\n\nPlease advise on availability, sizes, and delivery timeline.\n\nLooking forward to your reply 👟`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`, '_blank');
     setSubmitted(true);
-    setForm(EMPTY_FORM);
+    setForm({ name: '', phone: '', email: '', message: '' });
     setTimeout(() => setSubmitted(false), 3000);
-  }, [form]);
+  };
 
   return (
     <section className="contact-section">
-      {/* HEADER */}
       <div className="contact-header">
         <h2 className="contact-title">Get in Touch</h2>
         <p className="contact-subtitle">
-          Ready to switch to solar? Reach out to us for a free consultation 
-          and a custom quote tailored to your energy needs.
+          Got a question about a pair? Need help finding your size? Reach out — we respond fast, and we deliver same-day across Nairobi.
         </p>
       </div>
 
-      {/* BODY */}
       <div className="contact-body">
-
-        {/* LEFT */}
         <div className="contact-left">
-          <h3>Contact & Office Info</h3>
-
-          <div>
-            {CONTACT_DETAILS.map(d => (
-              <DetailRow key={d.id} {...d} />
-            ))}
-          </div>
+          <h3>Contact Info</h3>
+          {details.map((d, i) => (
+            <div key={i} className="detail-row">
+              <span className="detail-row__icon">{d.icon}</span>
+              <span>
+                <strong>{d.label}</strong>
+                <p>{d.href ? <a href={d.href}>{d.value}</a> : d.value}</p>
+              </span>
+            </div>
+          ))}
 
           <div className="hours-card">
             <h4>Working Hours</h4>
-            {WORKING_HOURS.map(w => (
-              <p key={w.day}>{w.day}: {w.hours}</p>
-            ))}
+            {hours.map((h) => <p key={h.day}>{h.day}: {h.time}</p>)}
           </div>
 
           <div className="delivery-areas">
-            <h4>Service Areas</h4>
-            <p>Nairobi, Kiambu, Machakos, Kajiado, Nakuru, Kisumu, and nationwide.</p>
+            <h4>Delivery Areas</h4>
+            <p>Same-day delivery across Nairobi. Countrywide delivery available — charges vary by location.</p>
           </div>
         </div>
 
-        {/* RIGHT */}
         <div className="contact-right">
-          <h3>Request a Quote</h3>
-
-          {submitted && (
-            <p className="success">✓ WhatsApp opened — we'll get back to you shortly ☀️</p>
-          )}
+          <h3>Send Us a Message</h3>
+          {submitted && <p className="success">✓ WhatsApp opened — we'll get back to you shortly 👟</p>}
 
           <form onSubmit={handleSubmit} className="contact-form">
-            <input
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              value={form.name}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              value={form.phone}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address (optional)"
-              value={form.email}
-              onChange={handleChange}
-            />
-            <textarea
-              name="message"
-              placeholder="Tell us about your solar needs (e.g., home, business, backup, water pumping)"
-              value={form.message}
-              onChange={handleChange}
-              required
-            />
-            <button type="submit">
-              Send on WhatsApp ☀️
-            </button>
+            <input name="name" placeholder="Your Name" value={form.name} onChange={handleChange} required />
+            <input name="phone" type="tel" placeholder="Phone Number" value={form.phone} onChange={handleChange} required />
+            <input name="email" type="email" placeholder="Email Address (optional)" value={form.email} onChange={handleChange} />
+            <textarea name="message" placeholder="Which shoe are you looking for? Include size and colour if you can." value={form.message} onChange={handleChange} required />
+            <button type="submit">Send on WhatsApp 👟</button>
           </form>
         </div>
-
       </div>
-
-      {/* MAP */}
-      <div className="contact-map">
-        <iframe src={MAP_EMBED} title="Office Location" loading="lazy" />
-      </div>
-
     </section>
   );
 };

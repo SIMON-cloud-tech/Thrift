@@ -1,0 +1,124 @@
+:root {
+  /* ══════════════════════════════════════════════════════════
+     INK — warm dark scale (text, dark surfaces)
+     ══════════════════════════════════════════════════════════ */
+  --color-ink:         #1C1A18;   /* warm near-black, like dark leather */
+  --color-ink-soft:    #3A3631;   /* body copy */
+  --color-muted:       #6B645B;   /* meta, counts */
+  --color-faint:       #A39B8F;   /* placeholders only */
+
+  /* ══════════════════════════════════════════════════════════
+     SURFACES — paper scale (backgrounds)
+     ══════════════════════════════════════════════════════════ */
+  --color-bg:          #FBF9F5;   /* page background (paper) */
+  --color-bg-soft:     #F4F0EA;   /* alternate page sections */
+  --color-bg-muted:    #E8E0D3;   /* image placeholders, skeletons */
+  --color-bg-sunken:   #E2D6C2;   /* deepest light layer (sole cream) */
+
+  /* ══════════════════════════════════════════════════════════
+     LINES
+     ══════════════════════════════════════════════════════════ */
+  --color-line:        #DDD4C6;
+  --color-line-strong: #BFB3A1;
+  --color-line-on-dark: rgba(255, 255, 255, 0.08);
+
+  /* ══════════════════════════════════════════════════════════
+     DARK SURFACES — warm black
+     (variable names kept so existing components don't break)
+     ══════════════════════════════════════════════════════════ */
+  --color-navy:        #1C1A18;   /* navbar, footer, chatbot header */
+  --color-navy-dark:   #121110;   /* top bar — one shade deeper */
+
+  /* ══════════════════════════════════════════════════════════
+     ACCENT — tan leather (one hue, multiple tiers)
+     Buttons, links, active nav, sale tags. Keep to ~10% of the page.
+     White text on --color-accent passes contrast (5.3:1).
+     ══════════════════════════════════════════════════════════ */
+  --color-accent-deep:    #4A2A14;   /* darkest — text on pale tan bg */
+  --color-accent-strong:  #6B3E1E;   /* deep — same use */
+  --color-accent:         #9A5B2E;   /* primary — buttons, links, active nav */
+  --color-accent-hover:   #7F4A24;   /* hover — darker */
+  --color-accent-soft:    #F1E4D6;   /* pale tint — badge bg, active states */
+  --color-accent-ring:    rgba(154, 91, 46, 0.25);   /* focus ring */
+
+  /* Light tiers — for text/icons on dark backgrounds */
+  --color-accent-bright:           #E0A66F;
+  --color-accent-on-dark:          #E0A66F;
+  --color-accent-on-dark-hover:    #EBBA8A;
+  --color-accent-on-dark-pressed:  #CF8F52;
+
+  /* Deep accent — oxblood, for rare emphasis (footer strip, hover on dark) */
+  --color-oxblood:        #5E1F23;
+
+  /* ══════════════════════════════════════════════════════════
+     SUCCESS — green (payment / confirmation only)
+     Kept green on purpose: M-Pesa confirmations should read as green.
+     ══════════════════════════════════════════════════════════ */
+  --color-success:         #16A34A;
+  --color-success-soft:    #E7F7EC;
+  --color-success-bg:      #F0FBF4;
+  --color-success-border:  #7ED9A0;
+  --color-success-strong:  #0A3D22;
+
+  /* ══════════════════════════════════════════════════════════
+     DANGER — red (errors, out of stock)
+     ══════════════════════════════════════════════════════════ */
+  --color-danger: #C42618;
+
+  /* ══════════════════════════════════════════════════════════
+     ON-DARK TEXT
+     ══════════════════════════════════════════════════════════ */
+  --color-on-dark:        #EDE7DD;
+  --color-on-dark-soft:   #C4BBAE;
+  --color-on-dark-muted:  #948B7E;
+
+  /* ══════════════════════════════════════════════════════════
+     GRADIENTS
+     Decorative gradients removed (flat colour looks less "template").
+     Names kept so existing CSS still works. Image overlays and the
+     loading shimmer stay because they're functional.
+     ══════════════════════════════════════════════════════════ */
+  --gradient-hero:   linear-gradient(#1C1A18, #1C1A18);
+  --gradient-accent: linear-gradient(#9A5B2E, #9A5B2E);
+  --gradient-overlay-dark: linear-gradient(
+    to top,
+    rgba(18, 17, 16, 0.85) 0%,
+    rgba(18, 17, 16, 0.35) 45%,
+    rgba(18, 17, 16, 0.05) 100%
+  );
+  --gradient-overlay-darker: linear-gradient(
+    to top,
+    rgba(18, 17, 16, 0.95) 0%,
+    rgba(18, 17, 16, 0.55) 55%,
+    rgba(18, 17, 16, 0.12) 100%
+  );
+  --gradient-shimmer: linear-gradient(
+    90deg,
+    #E8E0D3 0%,
+    #F4F0EA 50%,
+    #E8E0D3 100%
+  );
+
+  /* ══════════════════════════════════════════════════════════
+     SHADOWS — soft and neutral (no coloured glow on buttons)
+     ══════════════════════════════════════════════════════════ */
+  --shadow-sm:     0 1px 3px rgba(28, 26, 24, 0.06);
+  --shadow:        0 4px 12px rgba(28, 26, 24, 0.08);
+  --shadow-lg:     0 10px 25px rgba(28, 26, 24, 0.10);
+  --shadow-xl:     0 16px 36px rgba(28, 26, 24, 0.12);
+  --shadow-accent: 0 4px 12px rgba(28, 26, 24, 0.12);   /* was a green glow */
+
+  /* ══════════════════════════════════════════════════════════
+     RADII / MOTION / LAYOUT — unchanged
+     ══════════════════════════════════════════════════════════ */
+  --radius-sm: 0.375rem;
+  --radius:    0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-pill: 999px;
+
+  --transition: 0.2s ease;
+  --transition-slow: 0.4s ease;
+
+  --container-max: 1400px;
+}
